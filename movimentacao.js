@@ -1,4 +1,3 @@
-
 // ==========================================
 // THE LAST TAKE - SISTEMA DE LOCOMOÇÃO
 // ==========================================
@@ -117,33 +116,128 @@ window.cenarios = {
                     { x: 29.17,y: 77.35 }
                 ]
             },
+            {
+                nome: "SalaDeEstar1",
+                "destino": "sala3",
+                "pontos": [
+                    { "x": 44.73, "y": 38.9 },
+                    { "x": 48.83, "y": 38.06 },
+                    { "x": 48.9, "y": 70.78 },
+                    { "x": 44.66, "y": 70.45 }
+                ]
+            },
+            {
+                "nome": "SalaDeEstar2",
+                "destino": "sala4",
+                "pontos": [
+                    { "x": 68.01, "y": 35.73 },
+                    { "x": 76.65, "y": 34.39 },
+                    { "x": 77.31, "y": 78.13 },
+                    { "x": 68.59, "y": 75.63 }
+                ]
+            },
         ]
     },
 
     sala3: {
         imagem: "The Last Take Cenarios/Mansão Evelyn/Sala/Sala3.png",
-        areas: []
+        areas: [
+            {
+                "nome": "VoltarCorredor",
+                "destino": "sala2",
+                "pontos": [
+                    { "x": 13.84, "y": 0 },
+                    { "x": 22.47, "y": 0 },
+                    { "x": 22.47, "y": 82.64 },
+                    { "x": 13.98, "y": 82.47 }
+                ]
+            }
+        ]
     },
 
     sala4: {
         imagem: "The Last Take Cenarios/Mansão Evelyn/Sala/Sala4.png",
-        areas: []
+        areas: [
+            {
+                nome: "OlharOutroLado",
+                destino: "sala5",
+                pontos: [
+                    { x: 0, y: 90.98 },
+                    { x: 99.93, y: 90.98 },
+                    { x: 99.93, y: 100 },
+                    { x: 0, y: 100 }
+                ]
+            },
+            {
+                "nome": "VoltarCorredor",
+                "destino": "sala2",
+                "pontos": [
+                    { "x": 13.84, "y": 0 },
+                    { "x": 22.47, "y": 0 },
+                    { "x": 22.47, "y": 82.64 },
+                    { "x": 13.98, "y": 82.47 }
+                ]
+            }
+        ]
     },
 
     sala5: {
         imagem: "The Last Take Cenarios/Mansão Evelyn/Sala/Sala5.png",
-        areas: []
+        areas: [
+            {
+                nome: "OlharOutroLado",
+                destino: "sala4",
+                pontos: [
+                    { x: 0, y: 90.98 },
+                    { x: 99.93, y: 90.98 },
+                    { x: 99.93, y: 100 },
+                    { x: 0, y: 100 }
+                ]
+            }
+        ]
     },
 
     // QUARTOS DA MANSÃO
     quarto1: {
         imagem: "The Last Take Cenarios/Mansão Evelyn/Quarto/Quarto1.png",
-        areas: []
+        areas: [
+            {
+                "nome": "VoltarCorredor",
+                "destino": "sala1",
+                "pontos": [
+                    { "x": 13.84, "y": 0 },
+                    { "x": 22.47, "y": 0 },
+                    { "x": 22.47, "y": 82.64 },
+                    { "x": 13.98, "y": 82.47 }
+                ]
+            },
+            {
+                nome: "OlharOutroLado",
+                destino: "quarto2",
+                pontos: [
+                    { x: 0, y: 90.98 },
+                    { x: 99.93, y: 90.98 },
+                    { x: 99.93, y: 100 },
+                    { x: 0, y: 100 }
+                ]
+            }
+        ]
     },
 
     quarto2: {
         imagem: "The Last Take Cenarios/Mansão Evelyn/Quarto/Quarto2.png",
-        areas: []
+        areas: [
+            {
+                nome: "OlharOutroLado",
+                destino: "quarto1",
+                pontos: [
+                    { x: 0, y: 90.98 },
+                    { x: 99.93, y: 90.98 },
+                    { x: 99.93, y: 100 },
+                    { x: 0, y: 100 }
+                ]
+            }
+        ]
     },
 
     quarto3: {
@@ -154,7 +248,28 @@ window.cenarios = {
     // ESCRITÓRIO DA MANSÃO
     escritorio1: {
         imagem: "The Last Take Cenarios/Mansão Evelyn/Escritorio/Escritorio1.png",
-        areas: []
+        areas: [
+            {
+                nome: "VoltarSala1",
+                destino: "sala1",
+                pontos: [
+                    { x: 23.21, y: 14.69 },
+                    { x: 33.46, y: 18.2 },
+                    { x: 35.36, y: 62.94 },
+                    { x: 26.35, y: 59.1 }
+                ]
+            },
+            {
+                nome: "OlharOutroLado",
+                destino: "escritorio2",
+                pontos: [
+                    { x: 0, y: 90.98 },
+                    { x: 99.93, y: 90.98 },
+                    { x: 99.93, y: 100 },
+                    { x: 0, y: 100 }
+                ]
+            }
+        ]
     },
 
     escritorio2: {
@@ -168,6 +283,16 @@ window.cenarios = {
                     { x: 81.56,y: 21.06 },
                     { x: 79.22, y: 73.12 },
                     { x: 76.88, y: 72.17 }
+                ]
+            },
+            {
+                nome: "OlharOutroLado",
+                destino: "escritorio1",
+                pontos: [
+                    { x: 0, y: 90.98 },
+                    { x: 99.93, y: 90.98 },
+                    { x: 99.93, y: 100 },
+                    { x: 0, y: 100 }
                 ]
             },
         ]
@@ -275,3 +400,5 @@ window.mostrarCenario = function(nomeCenario) {
 // ==========================================
 
 window.mostrarCenario(window.cenaAtual);
+
+
