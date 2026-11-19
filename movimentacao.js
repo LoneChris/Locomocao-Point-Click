@@ -1,396 +1,630 @@
+
 // ==========================================
-// THE LAST TAKE - SISTEMA DE LOCOMOÇÃO
+// THE LAST TAKE - SISTEMA DE LOCOMOÇÃO COM POO
 // ==========================================
 
-// Lista de todos os cenários do jogo.
-// Os caminhos precisam corresponder exatamente
-// aos nomes das pastas e arquivos no computador.
+
+// ==========================================
+// CLASSE PONTO
+// ==========================================
+
+// Representa um ponto de coordenadas X e Y.
+
+class Ponto {
+
+    constructor(x, y) {
+
+        this.x = x;
+        this.y = y;
+
+    }
+
+}
+
+
+// ==========================================
+// CLASSE AREA INTERATIVA
+// ==========================================
+
+// Representa uma área clicável dentro de um cenário.
+
+class AreaInterativa {
+
+    constructor(nome, destino, pontos) {
+
+        this.nome = nome;
+        this.destino = destino;
+        this.pontos = pontos;
+
+    }
+
+}
+
+
+// ==========================================
+// CLASSE CENARIO
+// ==========================================
+
+// Representa cada cenário do jogo.
+// Armazena o caminho da imagem e suas áreas interativas.
+
+class Cenario {
+
+    constructor(imagem, areas = []) {
+
+        this.imagem = imagem;
+        this.areas = areas;
+
+    }
+
+}
+
+
+// ==========================================
+// CADASTRO DOS CENÁRIOS
+// ==========================================
+
+// Cada cenário é uma instância da classe Cenario.
+// Cada área é uma instância da classe AreaInterativa.
+// Cada coordenada é uma instância da classe Ponto.
 
 window.cenarios = {
 
+    // ======================================
     // ESCRITÓRIO DO DETETIVE
-    detetive1: {
-        imagem: "The Last Take Cenarios/Escritorio Detetive/Escritorio1.png",
+    // ======================================
 
-        areas: [
-            {
-                nome: "EntrarEscritorio",
-                destino: "detetive2",
-                pontos: [
-                    { x: 52.97, y: 12.17 },
-                    { x: 63.91, y: 13.86 },
-                    { x: 63.49, y: 72.38 },
-                    { x: 53.39, y: 76.93 }
+    detetive1: new Cenario(
+        "The Last Take Cenarios/Escritorio Detetive/Escritorio1.png",
+
+        [
+
+            new AreaInterativa(
+                "EntrarEscritorio",
+                "detetive2",
+
+                [
+                    new Ponto(52.97, 12.17),
+                    new Ponto(63.91, 13.86),
+                    new Ponto(63.49, 72.38),
+                    new Ponto(53.39, 76.93)
                 ]
-            }
-        ]
-    },
+            )
 
-    detetive2: {
-        imagem: "The Last Take Cenarios/Escritorio Detetive/Escritorio2.png",
-        areas: [
-            {
-                nome: "AproximarMesa",
-                destino: "detetive3",
-                pontos: [
-                    { x: 28.33, y: 82.54 },
-                    { x: 68.23, y: 62.75 },
-                    { x: 91.51, y: 71.22 },
-                    { x: 54.74, y: 100 }
-                    ]
-            }
         ]
-    },
+    ),
 
-    detetive3: {
-        imagem: "The Last Take Cenarios/Escritorio Detetive/Escritorio3.png",
-        areas: [
-        // Área 1: Começar o caso e ir até a mansão
-            {
-                nome: "ComeçarCaso",
-                destino: "mansaoEntrada",
-                pontos: [
-                    { x: 37.66, y: 17.57 },
-                    { x: 78.18, y: 41.27 },
-                    { x: 57.45, y: 75.03 },
-                    { x: 15.73, y: 29.42 }
+
+    detetive2: new Cenario(
+        "The Last Take Cenarios/Escritorio Detetive/Escritorio2.png",
+
+        [
+
+            new AreaInterativa(
+                "AproximarMesa",
+                "detetive3",
+
+                [
+                    new Ponto(28.33, 82.54),
+                    new Ponto(68.23, 62.75),
+                    new Ponto(91.51, 71.22),
+                    new Ponto(54.74, 100)
                 ]
-            }
-        ]
-    },
+            )
 
+        ]
+    ),
+
+
+    detetive3: new Cenario(
+        "The Last Take Cenarios/Escritorio Detetive/Escritorio3.png",
+
+        [
+
+            new AreaInterativa(
+                "ComeçarCaso",
+                "mansaoEntrada",
+
+                [
+                    new Ponto(37.66, 17.57),
+                    new Ponto(78.18, 41.27),
+                    new Ponto(57.45, 75.03),
+                    new Ponto(15.73, 29.42)
+                ]
+            )
+
+        ]
+    ),
+
+
+    // ======================================
     // ENTRADA DA MANSÃO
-    mansaoEntrada: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/MansãoEntrada.png",
-        areas: [
-            {
-                nome: "EntrarMansão",
-                destino: "sala1",
-                pontos: [
-                    { x: 38.07, y: 42.33 },
-                    { x: 65.83, y: 42.01 },
-                    { x: 65.83, y: 70.26 },
-                    { x: 38.13, y: 70.05 }
-                ]
-            },
-        ]
-    },
+    // ======================================
 
+    mansaoEntrada: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/MansãoEntrada.png",
+
+        [
+
+            new AreaInterativa(
+                "EntrarMansão",
+                "sala1",
+
+                [
+                    new Ponto(38.07, 42.33),
+                    new Ponto(65.83, 42.01),
+                    new Ponto(65.83, 70.26),
+                    new Ponto(38.13, 70.05)
+                ]
+            )
+
+        ]
+    ),
+
+
+    // ======================================
     // SALA DA MANSÃO
-    sala1: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Sala/Sala1.png",
-        areas: [
-            {
-                nome: "ParaQuarto",
-                destino: "quarto1",
-                pontos: [
-                    { x: 24.38, y: 19.47 },
-                    { x: 43.33, y: 25.4 },
-                    { x: 42.86, y: 79.68 },
-                    { x: 24.17, y: 88.36 }
-                ]
-            },
-            {
-                nome: "ParaCorredor",
-                destino: "sala2",
-                pontos: [
-                    { x: 73.91, y: 26.67 },
-                    { x: 83.44, y: 23.81 },
-                    { x: 83.33, y: 88.99 },
-                    { x: 72.97, y: 82.22 }
-                ]
-            },
-        ]
-    },
+    // ======================================
 
-    sala2: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Sala/Sala2.png",
-        areas: [
-            {
-                nome: "Escritorio",
-                destino: "escritorio2",
-                pontos: [
-                    { x: 28.85, y: 34.39 },
-                    { x: 35.78,y: 36.4 },
-                    { x: 36.09,y: 73.65 },
-                    { x: 29.17,y: 77.35 }
-                ]
-            },
-            {
-                nome: "SalaDeEstar1",
-                "destino": "sala3",
-                "pontos": [
-                    { "x": 44.73, "y": 38.9 },
-                    { "x": 48.83, "y": 38.06 },
-                    { "x": 48.9, "y": 70.78 },
-                    { "x": 44.66, "y": 70.45 }
-                ]
-            },
-            {
-                "nome": "SalaDeEstar2",
-                "destino": "sala4",
-                "pontos": [
-                    { "x": 68.01, "y": 35.73 },
-                    { "x": 76.65, "y": 34.39 },
-                    { "x": 77.31, "y": 78.13 },
-                    { "x": 68.59, "y": 75.63 }
-                ]
-            },
-        ]
-    },
+    sala1: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Sala/Sala1.png",
 
-    sala3: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Sala/Sala3.png",
-        areas: [
-            {
-                "nome": "VoltarCorredor",
-                "destino": "sala2",
-                "pontos": [
-                    { "x": 13.84, "y": 0 },
-                    { "x": 22.47, "y": 0 },
-                    { "x": 22.47, "y": 82.64 },
-                    { "x": 13.98, "y": 82.47 }
-                ]
-            }
-        ]
-    },
+        [
 
-    sala4: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Sala/Sala4.png",
-        areas: [
-            {
-                nome: "OlharOutroLado",
-                destino: "sala5",
-                pontos: [
-                    { x: 0, y: 90.98 },
-                    { x: 99.93, y: 90.98 },
-                    { x: 99.93, y: 100 },
-                    { x: 0, y: 100 }
-                ]
-            },
-            {
-                "nome": "VoltarCorredor",
-                "destino": "sala2",
-                "pontos": [
-                    { "x": 13.84, "y": 0 },
-                    { "x": 22.47, "y": 0 },
-                    { "x": 22.47, "y": 82.64 },
-                    { "x": 13.98, "y": 82.47 }
-                ]
-            }
-        ]
-    },
+            new AreaInterativa(
+                "ParaQuarto",
+                "quarto1",
 
-    sala5: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Sala/Sala5.png",
-        areas: [
-            {
-                nome: "OlharOutroLado",
-                destino: "sala4",
-                pontos: [
-                    { x: 0, y: 90.98 },
-                    { x: 99.93, y: 90.98 },
-                    { x: 99.93, y: 100 },
-                    { x: 0, y: 100 }
+                [
+                    new Ponto(24.38, 19.47),
+                    new Ponto(43.33, 25.4),
+                    new Ponto(42.86, 79.68),
+                    new Ponto(24.17, 88.36)
                 ]
-            }
-        ]
-    },
+            ),
 
+            new AreaInterativa(
+                "ParaCorredor",
+                "sala2",
+
+                [
+                    new Ponto(73.91, 26.67),
+                    new Ponto(83.44, 23.81),
+                    new Ponto(83.33, 88.99),
+                    new Ponto(72.97, 82.22)
+                ]
+            )
+
+        ]
+    ),
+
+
+    sala2: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Sala/Sala2.png",
+
+        [
+
+            new AreaInterativa(
+                "Escritorio",
+                "escritorio2",
+
+                [
+                    new Ponto(28.85, 34.39),
+                    new Ponto(35.78, 36.4),
+                    new Ponto(36.09, 73.65),
+                    new Ponto(29.17, 77.35)
+                ]
+            ),
+
+            new AreaInterativa(
+                "SalaDeEstar1",
+                "sala3",
+
+                [
+                    new Ponto(44.73, 38.9),
+                    new Ponto(48.83, 38.06),
+                    new Ponto(48.9, 70.78),
+                    new Ponto(44.66, 70.45)
+                ]
+            ),
+
+            new AreaInterativa(
+                "SalaDeEstar2",
+                "sala4",
+
+                [
+                    new Ponto(68.01, 35.73),
+                    new Ponto(76.65, 34.39),
+                    new Ponto(77.31, 78.13),
+                    new Ponto(68.59, 75.63)
+                ]
+            )
+
+        ]
+    ),
+
+
+    sala3: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Sala/Sala3.png",
+
+        [
+
+            new AreaInterativa(
+                "VoltarCorredor",
+                "sala2",
+
+                [
+                    new Ponto(13.84, 0),
+                    new Ponto(22.47, 0),
+                    new Ponto(22.47, 82.64),
+                    new Ponto(13.98, 82.47)
+                ]
+            )
+
+        ]
+    ),
+
+
+    sala4: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Sala/Sala4.png",
+
+        [
+
+            new AreaInterativa(
+                "OlharOutroLado",
+                "sala5",
+
+                [
+                    new Ponto(0, 90.98),
+                    new Ponto(99.93, 90.98),
+                    new Ponto(99.93, 100),
+                    new Ponto(0, 100)
+                ]
+            ),
+
+            new AreaInterativa(
+                "VoltarCorredor",
+                "sala2",
+
+                [
+                    new Ponto(13.84, 0),
+                    new Ponto(22.47, 0),
+                    new Ponto(22.47, 82.64),
+                    new Ponto(13.98, 82.47)
+                ]
+            )
+
+        ]
+    ),
+
+
+    sala5: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Sala/Sala5.png",
+
+        [
+
+            new AreaInterativa(
+                "OlharOutroLado",
+                "sala4",
+
+                [
+                    new Ponto(0, 90.98),
+                    new Ponto(99.93, 90.98),
+                    new Ponto(99.93, 100),
+                    new Ponto(0, 100)
+                ]
+            )
+
+        ]
+    ),
+
+
+    // ======================================
     // QUARTOS DA MANSÃO
-    quarto1: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Quarto/Quarto1.png",
-        areas: [
-            {
-                "nome": "VoltarCorredor",
-                "destino": "sala1",
-                "pontos": [
-                    { "x": 13.84, "y": 0 },
-                    { "x": 22.47, "y": 0 },
-                    { "x": 22.47, "y": 82.64 },
-                    { "x": 13.98, "y": 82.47 }
+    // ======================================
+
+    quarto1: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Quarto/Quarto1.png",
+
+        [
+
+            new AreaInterativa(
+                "VoltarCorredor",
+                "sala1",
+
+                [
+                    new Ponto(13.84, 0),
+                    new Ponto(22.47, 0),
+                    new Ponto(22.47, 82.64),
+                    new Ponto(13.98, 82.47)
                 ]
-            },
-            {
-                nome: "OlharOutroLado",
-                destino: "quarto2",
-                pontos: [
-                    { x: 0, y: 90.98 },
-                    { x: 99.93, y: 90.98 },
-                    { x: 99.93, y: 100 },
-                    { x: 0, y: 100 }
+            ),
+
+            new AreaInterativa(
+                "OlharOutroLado",
+                "quarto2",
+
+                [
+                    new Ponto(0, 90.98),
+                    new Ponto(99.93, 90.98),
+                    new Ponto(99.93, 100),
+                    new Ponto(0, 100)
                 ]
-            }
+            )
+
         ]
-    },
+    ),
 
-    quarto2: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Quarto/Quarto2.png",
-        areas: [
-            {
-                nome: "OlharOutroLado",
-                destino: "quarto1",
-                pontos: [
-                    { x: 0, y: 90.98 },
-                    { x: 99.93, y: 90.98 },
-                    { x: 99.93, y: 100 },
-                    { x: 0, y: 100 }
+
+    quarto2: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Quarto/Quarto2.png",
+
+        [
+
+            new AreaInterativa(
+                "OlharOutroLado",
+                "quarto1",
+
+                [
+                    new Ponto(0, 90.98),
+                    new Ponto(99.93, 90.98),
+                    new Ponto(99.93, 100),
+                    new Ponto(0, 100)
                 ]
-            }
+            )
+
         ]
-    },
+    ),
 
-    quarto3: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Quarto/Quarto3.png",
-        areas: []
-    },
 
+    quarto3: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Quarto/Quarto3.png",
+        []
+    ),
+
+
+    // ======================================
     // ESCRITÓRIO DA MANSÃO
-    escritorio1: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Escritorio/Escritorio1.png",
-        areas: [
-            {
-                nome: "VoltarSala1",
-                destino: "sala1",
-                pontos: [
-                    { x: 23.21, y: 14.69 },
-                    { x: 33.46, y: 18.2 },
-                    { x: 35.36, y: 62.94 },
-                    { x: 26.35, y: 59.1 }
-                ]
-            },
-            {
-                nome: "OlharOutroLado",
-                destino: "escritorio2",
-                pontos: [
-                    { x: 0, y: 90.98 },
-                    { x: 99.93, y: 90.98 },
-                    { x: 99.93, y: 100 },
-                    { x: 0, y: 100 }
-                ]
-            }
-        ]
-    },
+    // ======================================
 
-    escritorio2: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Escritorio/Escritorio2.png",
-        areas: [
-            {
-                nome: "VoltarCorredor",
-                destino: "sala2",
-                pontos: [
-                    { x: 78.85, y: 23.6 },
-                    { x: 81.56,y: 21.06 },
-                    { x: 79.22, y: 73.12 },
-                    { x: 76.88, y: 72.17 }
-                ]
-            },
-            {
-                nome: "OlharOutroLado",
-                destino: "escritorio1",
-                pontos: [
-                    { x: 0, y: 90.98 },
-                    { x: 99.93, y: 90.98 },
-                    { x: 99.93, y: 100 },
-                    { x: 0, y: 100 }
-                ]
-            },
-        ]
-    },
+    escritorio1: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Escritorio/Escritorio1.png",
 
-    escritorio3: {
-        imagem: "The Last Take Cenarios/Mansão Evelyn/Escritorio/Escritorio3.png",
-        areas: []
-    }
+        [
+
+            new AreaInterativa(
+                "VoltarSala1",
+                "sala1",
+
+                [
+                    new Ponto(23.21, 14.69),
+                    new Ponto(33.46, 18.2),
+                    new Ponto(35.36, 62.94),
+                    new Ponto(26.35, 59.1)
+                ]
+            ),
+
+            new AreaInterativa(
+                "OlharOutroLado",
+                "escritorio2",
+
+                [
+                    new Ponto(0, 90.98),
+                    new Ponto(99.93, 90.98),
+                    new Ponto(99.93, 100),
+                    new Ponto(0, 100)
+                ]
+            )
+
+        ]
+    ),
+
+
+    escritorio2: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Escritorio/Escritorio2.png",
+
+        [
+
+            new AreaInterativa(
+                "VoltarCorredor",
+                "sala2",
+
+                [
+                    new Ponto(78.85, 23.6),
+                    new Ponto(81.56, 21.06),
+                    new Ponto(79.22, 73.12),
+                    new Ponto(76.88, 72.17)
+                ]
+            ),
+
+            new AreaInterativa(
+                "OlharOutroLado",
+                "escritorio1",
+
+                [
+                    new Ponto(0, 90.98),
+                    new Ponto(99.93, 90.98),
+                    new Ponto(99.93, 100),
+                    new Ponto(0, 100)
+                ]
+            )
+
+        ]
+    ),
+
+
+    escritorio3: new Cenario(
+        "The Last Take Cenarios/Mansão Evelyn/Escritorio/Escritorio3.png",
+        []
+    )
 
 };
 
 
 // ==========================================
-// CENÁRIO INICIAL
+// CLASSE GERENCIADOR DE CENÁRIOS
 // ==========================================
 
-window.cenaAtual = "detetive1";
+// Responsável por controlar a movimentação,
+// exibir as imagens e criar as áreas clicáveis.
 
+class GerenciadorCenarios {
 
-// ==========================================
-// FUNÇÃO PARA MOSTRAR UM CENÁRIO
-// ==========================================
+    constructor(cenarios, cenarioInicial, elementoId) {
 
-window.mostrarCenario = function(nomeCenario) {
+        this.cenarios = cenarios;
 
-    // Procura o cenário na lista
-    const cenario = window.cenarios[nomeCenario];
+        this.cenaAtual = cenarioInicial;
 
-    // Verifica se o cenário existe
-    if (!cenario) {
-        console.error("Cenário não encontrado:", nomeCenario);
-        return;
+        this.elementoId = elementoId;
+
     }
 
-    // Atualiza o cenário atual
-    window.cenaAtual = nomeCenario;
-
-    // Local onde o cenário será exibido
-    const telaJogo = document.getElementById("jogo-cenario");
-
-    // Cria o container do cenário
-    const container = document.createElement("div");
-    container.classList.add("cena-container");
-
-    // Cria a imagem
-    const imagem = document.createElement("img");
-    imagem.src = cenario.imagem;
-    imagem.alt = "Cenário do jogo";
-    imagem.classList.add("cena-imagem");
-
-    // Adiciona a imagem ao container
-    container.appendChild(imagem);
-
 
     // ======================================
-    // CRIA AS ÁREAS CLICÁVEIS
+    // MOSTRAR UM CENÁRIO
     // ======================================
 
-    cenario.areas.forEach((area) => {
+    mostrarCenario(nomeCenario) {
 
-        // Cria um botão para a área
-        const botao = document.createElement("button");
+        // Procura o cenário solicitado.
+        const cenario = this.cenarios[nomeCenario];
 
-        botao.type = "button";
-        botao.classList.add("area-clique");
+        // Verifica se o cenário existe.
+        if (!cenario) {
 
-        botao.setAttribute("aria-label", area.nome);
+            console.error("Cenário não encontrado:", nomeCenario);
 
-        // Transforma os quatro pontos em um polígono
-        const formato = area.pontos
-            .map(ponto => `${ponto.x}% ${ponto.y}%`)
-            .join(", ");
+            return;
 
-        // O botão ocupa o cenário inteiro,
-        // mas só pode ser clicado dentro do polígono.
-        botao.style.clipPath = `polygon(${formato})`;
+        }
 
-        // Ao clicar, muda para o cenário de destino
-        botao.addEventListener("click", () => {
+        // Atualiza o cenário atual.
+        this.cenaAtual = nomeCenario;
+        window.cenaAtual = nomeCenario;
 
-            window.mostrarCenario(area.destino);
+        // Procura o elemento que exibirá o cenário.
+        const telaJogo = document.getElementById(this.elementoId);
+
+        if (!telaJogo) {
+
+            console.error("Elemento do jogo não encontrado:", this.elementoId);
+
+            return;
+
+        }
+
+        // Cria o container do cenário.
+        const container = document.createElement("div");
+
+        container.classList.add("cena-container");
+
+
+        // ==================================
+        // CRIAR IMAGEM DO CENÁRIO
+        // ==================================
+
+        const imagem = document.createElement("img");
+
+        imagem.src = cenario.imagem;
+
+        imagem.alt = "Cenário do jogo";
+
+        imagem.classList.add("cena-imagem");
+
+        container.appendChild(imagem);
+
+
+        // ==================================
+        // CRIAR ÁREAS CLICÁVEIS
+        // ==================================
+
+        cenario.areas.forEach((area) => {
+
+            // Cria um botão para a área.
+            const botao = document.createElement("button");
+
+            botao.type = "button";
+
+            botao.classList.add("area-clique");
+
+            botao.setAttribute("aria-label", area.nome);
+
+
+            // Transforma os pontos em um polígono.
+            const formato = area.pontos
+
+                .map(ponto => `${ponto.x}% ${ponto.y}%`)
+
+                .join(", ");
+
+
+            // Define o formato da área clicável.
+            botao.style.clipPath = `polygon(${formato})`;
+
+
+            // Ao clicar, muda para o cenário de destino.
+            botao.addEventListener("click", () => {
+
+                this.mostrarCenario(area.destino);
+
+            });
+
+
+            container.appendChild(botao);
 
         });
 
-        container.appendChild(botao);
 
-    });
+        // ==================================
+        // ATUALIZAR A TELA
+        // ==================================
+
+        telaJogo.replaceChildren(container);
 
 
-    // ======================================
-    // ATUALIZA A TELA
-    // ======================================
+        // Avisa outros sistemas que o cenário mudou.
+        // Isso mantém a comunicação com o editor de áreas.
 
-    telaJogo.replaceChildren(container);
+        window.dispatchEvent(new Event("cenarioAtualizado"));
 
-    // Avisa o editor que o cenário mudou
-    window.dispatchEvent(new Event("cenarioAtualizado"));
+    }
+
+}
+
+
+// ==========================================
+// INICIALIZAÇÃO DO SISTEMA
+// ==========================================
+
+// Cria uma instância do gerenciador de cenários.
+
+const gerenciadorCenarios = new GerenciadorCenarios(
+
+    window.cenarios,
+
+    "detetive1",
+
+    "jogo-cenario"
+
+);
+
+
+// Mantém as variáveis globais para compatibilidade
+// com outros arquivos do projeto.
+
+window.cenaAtual = gerenciadorCenarios.cenaAtual;
+
+
+// Mantém a função global mostrarCenario.
+// Assim, outros arquivos podem continuar chamando
+// window.mostrarCenario(nomeCenario).
+
+window.mostrarCenario = function(nomeCenario) {
+
+    gerenciadorCenarios.mostrarCenario(nomeCenario);
+
+    window.cenaAtual = gerenciadorCenarios.cenaAtual;
 
 };
 
@@ -400,5 +634,3 @@ window.mostrarCenario = function(nomeCenario) {
 // ==========================================
 
 window.mostrarCenario(window.cenaAtual);
-
-
