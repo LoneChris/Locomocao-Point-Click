@@ -1,108 +1,232 @@
+// ==========================================
+// THE LAST TAKE - EDITOR DE ÁREAS COM POO
+// ==========================================
 
 
 // ==========================================
-// THE LAST TAKE - EDITOR TEMPORÁRIO DE ÁREAS
+// CLASSE PAINEL EDITOR
 // ==========================================
 
-// Controla se o editor está aberto
-let editorAtivo = false;
+// Responsável por criar e controlar a interface
+// visual do editor de áreas.
 
-// Número da área que está sendo editada
-let areaSelecionada = 0;
+class PainelEditor {
 
-// Número do ponto que está sendo arrastado
-let pontoArrastado = null;
+    constructor() {
 
+        // Cria o painel principal.
+        this.painel = document.createElement("div");
 
-// ==========================================
-// CRIA O PAINEL DO EDITOR
-// ==========================================
-
-const painel = document.createElement("div");
-
-painel.id = "painel-editor";
-
-painel.innerHTML = `
-    <h3>Editor de áreas</h3>
-
-    <p>Selecione uma área:</p>
-
-    <select id="seletor-areas"></select>
-
-    <button id="botao-nova-area">+ Nova área</button>
-
-    <hr>
-
-    <p><strong>Coordenadas dos pontos:</strong></p>
-
-    <div id="coordenadas-pontos">
-        Nenhuma área selecionada.
-    </div>
-
-    <hr>
-
-    <button id="botao-copiar">Copiar código da área</button>
-
-    <p id="mensagem-editor">
-        Arraste os pontos amarelos para posicioná-los.
-    </p>
-
-    <hr>
-
-    <p>Pressione E para fechar o editor.</p>
-`;
-
-document.body.appendChild(painel);
+        this.painel.id = "painel-editor";
 
 
-// ==========================================
-// ACESSA A ÁREA QUE ESTÁ SENDO EDITADA
-// ==========================================
+        // Conteúdo visual do painel.
+        this.painel.innerHTML = `
 
-function obterAreaAtual() {
+            <h3>Editor de áreas</h3>
 
-    const cenario = window.cenarios[window.cenaAtual];
+            <p>Selecione uma área:</p>
 
-    if (!cenario || cenario.areas.length === 0) {
-        return null;
+            <select id="seletor-areas"></select>
+
+            <button id="botao-nova-area">+ Nova área</button>
+
+            <hr>
+
+            <p><strong>Coordenadas dos pontos:</strong></p>
+
+            <div id="coordenadas-pontos">
+                Nenhuma área selecionada.
+            </div>
+
+            <hr>
+
+            <button id="botao-copiar">Copiar código da área</button>
+
+            <p id="mensagem-editor">
+                Arraste os pontos amarelos para posicioná-los.
+            </p>
+
+            <hr>
+
+            <p>Pressione E para fechar o editor.</p>
+
+        `;
+
+
+        // Adiciona o painel ao documento.
+        document.body.appendChild(this.painel);
+
+
+        // Guarda referências aos elementos do painel.
+        this.seletor = this.painel.querySelector("#seletor-areas");
+
+        this.botaoNovaArea = this.painel.querySelector("#botao-nova-area");
+
+        this.botaoCopiar = this.painel.querySelector("#botao-copiar");
+
+        this.coordenadas = this.painel.querySelector("#coordenadas-pontos");
+
+        this.mensagem = this.painel.querySelector("#mensagem-editor");
+
     }
 
-    return cenario.areas[areaSelecionada];
+
+    // ======================================
+    // MOSTRAR E ESCONDER PAINEL
+    // ======================================
+
+    mostrar() {
+
+        this.painel.style.display = "block";
+
+    }
+
+
+    esconder() {
+
+        this.painel.style.display = "none";
+
+    }
+
+
+    // ======================================
+    // ATUALIZAR LISTA DE ÁREAS
+    // ======================================
+
+    atualizarListaAreas(areas, areaSelecionada) {
+
+        this.seletor.innerHTML = "";
+
+        areas.forEach((area, indice) => {
+
+            const opcao = document.createElement("option");
+
+            opcao.value = indice;
+
+            opcao.textContent = area.nome;
+
+            this.seletor.appendChild(opcao);
+
+        });
+
+
+        if (areas.length > 0) {
+
+            this.seletor.value = areaSelecionada;
+
+        }
+
+    }
+
+
+    // ======================================
+    // ATUALIZAR COORDENADAS
+    // ======================================
+
+    atualizarCoordenadas(area) {
+
+        if (!area) {
+
+            this.coordenadas.textContent = "Nenhuma área selecionada.";
+
+            return;
+
+        }
+
+
+        this.coordenadas.innerHTML = "";
+
+
+        area.pontos.forEach((ponto, indice) => {
+
+            const linha = document.createElement("p");
+
+            linha.textContent =
+                `P${indice + 1}: X = ${ponto.x}% | Y = ${ponto.y}%`;
+
+            this.coordenadas.appendChild(linha);
+
+        });
+
+    }
+
+
+    // ======================================
+    // MOSTRAR MENSAGEM
+    // ======================================
+
+    mostrarMensagem(texto) {
+
+        this.mensagem.textContent = texto;
+
+    }
 
 }
 
 
 // ==========================================
-// ATUALIZA A LISTA DE ÁREAS
+// CLASSE MANIPULADOR DE ÁREAS
 // ==========================================
 
-function atualizarListaAreas() {
+// Responsável por criar e localizar as áreas
+// interativas dentro dos cenários.
 
-    const seletor = document.getElementById("seletor-areas");
+class ManipuladorAreas {
 
-    const cenario = window.cenarios[window.cenaAtual];
+    // ======================================
+    // OBTER ÁREA SELECIONADA
+    // ======================================
 
-    seletor.innerHTML = "";
+    obterAreaAtual(cenario, areaSelecionada) {
 
-    cenario.areas.forEach((area, indice) => {
+        if (!cenario || cenario.areas.length === 0) {
 
-        const opcao = document.createElement("option");
+            return null;
 
-        opcao.value = indice;
-        opcao.textContent = area.nome;
+        }
 
-        seletor.appendChild(opcao);
+        return cenario.areas[areaSelecionada] || null;
 
-    });
+    }
 
-    if (cenario.areas.length > 0) {
 
-        areaSelecionada = Math.min(
-            areaSelecionada,
-            cenario.areas.length - 1
+    // ======================================
+    // CRIAR UMA NOVA ÁREA
+    // ======================================
+
+    adicionarNovaArea(cenario, nome, destino) {
+
+        // Cria uma área utilizando a classe
+        // AreaInterativa do movimentacao.js.
+
+        const novaArea = new AreaInterativa(
+
+            nome,
+
+            destino,
+
+            [
+
+                new Ponto(30, 30),
+
+                new Ponto(70, 30),
+
+                new Ponto(70, 70),
+
+                new Ponto(30, 70)
+
+            ]
+
         );
 
-        seletor.value = areaSelecionada;
+
+        // Adiciona a nova área ao cenário.
+        cenario.areas.push(novaArea);
+
+
+        // Retorna a posição da área criada.
+        return cenario.areas.length - 1;
 
     }
 
@@ -110,391 +234,677 @@ function atualizarListaAreas() {
 
 
 // ==========================================
-// CRIA UMA NOVA ÁREA
+// CLASSE MANIPULADOR DE PONTOS
 // ==========================================
 
-function adicionarNovaArea() {
+// Responsável por desenhar os pontos,
+// controlar o arraste e atualizar as coordenadas.
 
-    const cenario = window.cenarios[window.cenaAtual];
+class ManipuladorPontos {
 
-    const nome = prompt("Digite um nome para esta área:");
+    constructor(painelEditor) {
 
-    if (!nome || nome.trim() === "") {
-        return;
+        this.painelEditor = painelEditor;
+
+        // Guarda o índice do ponto arrastado.
+        this.pontoArrastado = null;
+
     }
 
-    // Cria uma área inicial no centro do cenário
-    const novaArea = {
 
-        nome: nome.trim(),
+    // ======================================
+    // DESENHAR OS PONTOS NA TELA
+    // ======================================
 
-        // O destino começa sendo o cenário atual.
-        // Depois você pode trocar pelo destino correto.
-        destino: window.cenaAtual,
+    desenhar(container, area) {
 
-        pontos: [
-            { x: 30, y: 30 },
-            { x: 70, y: 30 },
-            { x: 70, y: 70 },
-            { x: 30, y: 70 }
-        ]
+        if (!container) return;
 
-    };
 
-    cenario.areas.push(novaArea);
+        // Remove a camada anterior, se existir.
+        const camadaAntiga = document.getElementById("camada-editor");
 
-    // Seleciona a área recém-criada
-    areaSelecionada = cenario.areas.length - 1;
+        if (camadaAntiga) {
 
-    atualizarListaAreas();
+            camadaAntiga.remove();
 
-    desenharPontos();
+        }
 
-}
 
+        // Verifica se existe uma área selecionada.
+        if (!area) {
 
-// ==========================================
-// DESENHA OS QUATRO PONTOS NA TELA
-// ==========================================
+            this.painelEditor.atualizarCoordenadas(null);
 
-function desenharPontos() {
+            return;
 
-    const container = document.querySelector(".cena-container");
+        }
 
-    if (!container) return;
 
-    // Remove a camada anterior, se existir
-    const camadaAntiga = document.getElementById("camada-editor");
+        // Cria a camada que ficará sobre o cenário.
+        const camada = document.createElement("div");
 
-    if (camadaAntiga) {
-        camadaAntiga.remove();
-    }
+        camada.id = "camada-editor";
 
-    const area = obterAreaAtual();
 
-    // Se não houver área, não desenha os pontos
-    if (!area) {
+        // ==================================
+        // PRÉ-VISUALIZAÇÃO DA ÁREA
+        // ==================================
 
-        atualizarCoordenadas();
+        const previa = document.createElement("div");
 
-        return;
-    }
+        previa.classList.add("area-editor-preview");
 
-    // Camada que fica por cima do cenário
-    const camada = document.createElement("div");
 
-    camada.id = "camada-editor";
-
-    // Pré-visualização da área selecionada
-    const previa = document.createElement("div");
-
-    previa.classList.add("area-editor-preview");
-
-    previa.style.clipPath = `polygon(${
-        area.pontos
-            .map(ponto => `${ponto.x}% ${ponto.y}%`)
-            .join(", ")
-    })`;
-
-    camada.appendChild(previa);
-
-
-    // Cria os quatro marcadores
-    area.pontos.forEach((ponto, indice) => {
-
-        const marcador = document.createElement("div");
-
-        marcador.classList.add("ponto-editor");
-
-        marcador.textContent = `P${indice + 1}`;
-
-        marcador.style.left = ponto.x + "%";
-        marcador.style.top = ponto.y + "%";
-
-        // Começa a arrastar o ponto
-        marcador.addEventListener("pointerdown", (evento) => {
-
-            evento.preventDefault();
-
-            evento.stopPropagation();
-
-            pontoArrastado = indice;
-
-            marcador.setPointerCapture(evento.pointerId);
-
-        });
-
-        // Atualiza a posição enquanto arrasta
-        marcador.addEventListener("pointermove", (evento) => {
-
-            if (pontoArrastado !== indice) return;
-
-            moverPonto(evento, container);
-
-        });
-
-        // Finaliza o movimento
-        marcador.addEventListener("pointerup", () => {
-
-            pontoArrastado = null;
-
-        });
-
-        marcador.addEventListener("pointercancel", () => {
-
-            pontoArrastado = null;
-
-        });
-
-        camada.appendChild(marcador);
-
-    });
-
-    container.appendChild(camada);
-
-    atualizarCoordenadas();
-
-}
-
-
-// ==========================================
-// MOVIMENTA UM PONTO
-// ==========================================
-
-function moverPonto(evento, container) {
-
-    const area = obterAreaAtual();
-
-    if (!area) return;
-
-    // Descobre o tamanho e a posição do cenário
-    const retangulo = container.getBoundingClientRect();
-
-    // Converte a posição do mouse para porcentagem
-    let x = ((evento.clientX - retangulo.left) / retangulo.width) * 100;
-
-    let y = ((evento.clientY - retangulo.top) / retangulo.height) * 100;
-
-    // Impede que o ponto saia dos limites da imagem
-    x = Math.max(0, Math.min(100, x));
-
-    y = Math.max(0, Math.min(100, y));
-
-    // Atualiza a coordenada do ponto selecionado
-    area.pontos[pontoArrastado] = {
-
-        x: Number(x.toFixed(2)),
-        y: Number(y.toFixed(2))
-
-    };
-
-    // Atualiza os marcadores sem recriá-los.
-    // Isso evita interromper o arraste do mouse.
-    const marcadores = document.querySelectorAll(".ponto-editor");
-
-    marcadores.forEach((marcador, indice) => {
-
-        marcador.style.left = area.pontos[indice].x + "%";
-
-        marcador.style.top = area.pontos[indice].y + "%";
-
-    });
-
-    // Atualiza o formato da área amarela
-    const previa = document.querySelector(".area-editor-preview");
-
-    if (previa) {
-
+        // Transforma as coordenadas em um polígono.
         previa.style.clipPath = `polygon(${
+
             area.pontos
+
                 .map(ponto => `${ponto.x}% ${ponto.y}%`)
+
                 .join(", ")
+
         })`;
 
+
+        camada.appendChild(previa);
+
+
+        // ==================================
+        // CRIAR OS MARCADORES
+        // ==================================
+
+        area.pontos.forEach((ponto, indice) => {
+
+            const marcador = document.createElement("div");
+
+            marcador.classList.add("ponto-editor");
+
+            marcador.textContent = `P${indice + 1}`;
+
+
+            // Posiciona o marcador.
+            marcador.style.left = ponto.x + "%";
+
+            marcador.style.top = ponto.y + "%";
+
+
+            // ==================================
+            // INICIAR ARRASTE
+            // ==================================
+
+            marcador.addEventListener("pointerdown", (evento) => {
+
+                evento.preventDefault();
+
+                evento.stopPropagation();
+
+
+                // Guarda qual ponto está sendo arrastado.
+                this.pontoArrastado = indice;
+
+
+                // Mantém o controle do ponteiro.
+                marcador.setPointerCapture(evento.pointerId);
+
+            });
+
+
+            // ==================================
+            // MOVIMENTAR PONTO
+            // ==================================
+
+            marcador.addEventListener("pointermove", (evento) => {
+
+                if (this.pontoArrastado !== indice) return;
+
+
+                this.moverPonto(evento, container, area, camada);
+
+            });
+
+
+            // ==================================
+            // FINALIZAR ARRASTE
+            // ==================================
+
+            marcador.addEventListener("pointerup", () => {
+
+                this.pontoArrastado = null;
+
+            });
+
+
+            marcador.addEventListener("pointercancel", () => {
+
+                this.pontoArrastado = null;
+
+            });
+
+
+            camada.appendChild(marcador);
+
+        });
+
+
+        // Adiciona a camada ao cenário.
+        container.appendChild(camada);
+
+
+        // Atualiza as coordenadas exibidas.
+        this.painelEditor.atualizarCoordenadas(area);
+
     }
 
-    // Atualiza os números na tela
-    atualizarCoordenadas();
+
+    // ======================================
+    // MOVIMENTAR UM PONTO
+    // ======================================
+
+    moverPonto(evento, container, area, camada) {
+
+        if (!area || this.pontoArrastado === null) return;
+
+
+        // Descobre o tamanho e a posição do cenário.
+        const retangulo = container.getBoundingClientRect();
+
+
+        // Converte a posição do mouse para porcentagem.
+        let x = (
+
+            (evento.clientX - retangulo.left) /
+
+            retangulo.width
+
+        ) * 100;
+
+
+        let y = (
+
+            (evento.clientY - retangulo.top) /
+
+            retangulo.height
+
+        ) * 100;
+
+
+        // Impede que o ponto saia dos limites da imagem.
+        x = Math.max(0, Math.min(100, x));
+
+        y = Math.max(0, Math.min(100, y));
+
+
+        // Atualiza as coordenadas do objeto Ponto.
+        const ponto = area.pontos[this.pontoArrastado];
+
+        ponto.x = Number(x.toFixed(2));
+
+        ponto.y = Number(y.toFixed(2));
+
+
+        // ==================================
+        // ATUALIZAR MARCADORES
+        // ==================================
+
+        const marcadores = camada.querySelectorAll(".ponto-editor");
+
+        marcadores.forEach((marcador, indice) => {
+
+            marcador.style.left = area.pontos[indice].x + "%";
+
+            marcador.style.top = area.pontos[indice].y + "%";
+
+        });
+
+
+        // ==================================
+        // ATUALIZAR PRÉ-VISUALIZAÇÃO
+        // ==================================
+
+        const previa = camada.querySelector(".area-editor-preview");
+
+        if (previa) {
+
+            previa.style.clipPath = `polygon(${
+
+                area.pontos
+
+                    .map(ponto => `${ponto.x}% ${ponto.y}%`)
+
+                    .join(", ")
+
+            })`;
+
+        }
+
+
+        // Atualiza os números das coordenadas.
+        this.painelEditor.atualizarCoordenadas(area);
+
+    }
+
+
+    // ======================================
+    // FINALIZAR MOVIMENTAÇÃO
+    // ======================================
+
+    finalizarMovimento() {
+
+        this.pontoArrastado = null;
+
+    }
 
 }
 
 
 // ==========================================
-// MOSTRA AS COORDENADAS DOS PONTOS
+// CLASSE EDITOR DE ÁREAS
 // ==========================================
 
-function atualizarCoordenadas() {
+// Responsável por coordenar o editor,
+// conectar as outras classes e controlar os eventos.
 
-    const elemento = document.getElementById("coordenadas-pontos");
+class EditorAreas {
 
-    const area = obterAreaAtual();
+    constructor() {
 
-    if (!area) {
+        // Estado do editor.
+        this.editorAtivo = false;
 
-        elemento.textContent = "Nenhuma área selecionada.";
+        // Índice da área selecionada.
+        this.areaSelecionada = 0;
 
-        return;
+
+        // Cria os componentes do editor.
+        this.painel = new PainelEditor();
+
+        this.manipuladorAreas = new ManipuladorAreas();
+
+        this.manipuladorPontos = new ManipuladorPontos(this.painel);
+
+
+        // Configura os eventos.
+        this.configurarEventos();
+
     }
 
-    elemento.innerHTML = "";
 
-    area.pontos.forEach((ponto, indice) => {
+    // ======================================
+    // OBTER CENÁRIO ATUAL
+    // ======================================
 
-        const linha = document.createElement("p");
+    obterCenarioAtual() {
 
-        linha.textContent =
-            `P${indice + 1}: X = ${ponto.x}% | Y = ${ponto.y}%`;
+        return window.cenarios[window.cenaAtual];
 
-        elemento.appendChild(linha);
+    }
 
-    });
+
+    // ======================================
+    // OBTER ÁREA ATUAL
+    // ======================================
+
+    obterAreaAtual() {
+
+        const cenario = this.obterCenarioAtual();
+
+        return this.manipuladorAreas.obterAreaAtual(
+
+            cenario,
+
+            this.areaSelecionada
+
+        );
+
+    }
+
+
+    // ======================================
+    // ATUALIZAR LISTA DE ÁREAS
+    // ======================================
+
+    atualizarListaAreas() {
+
+        const cenario = this.obterCenarioAtual();
+
+        if (!cenario) return;
+
+
+        // Impede que a seleção ultrapasse
+        // a quantidade de áreas existentes.
+
+        if (cenario.areas.length > 0) {
+
+            this.areaSelecionada = Math.min(
+
+                this.areaSelecionada,
+
+                cenario.areas.length - 1
+
+            );
+
+        } else {
+
+            this.areaSelecionada = 0;
+
+        }
+
+
+        this.painel.atualizarListaAreas(
+
+            cenario.areas,
+
+            this.areaSelecionada
+
+        );
+
+    }
+
+
+    // ======================================
+    // DESENHAR PONTOS
+    // ======================================
+
+    desenharPontos() {
+
+        const container = document.querySelector(".cena-container");
+
+        if (!container) return;
+
+
+        const area = this.obterAreaAtual();
+
+
+        this.manipuladorPontos.desenhar(
+
+            container,
+
+            area
+
+        );
+
+    }
+
+
+    // ======================================
+    // ADICIONAR NOVA ÁREA
+    // ======================================
+
+    adicionarNovaArea() {
+
+        const cenario = this.obterCenarioAtual();
+
+        if (!cenario) return;
+
+
+        // Solicita o nome da nova área.
+        const nome = prompt("Digite um nome para esta área:");
+
+
+        // Verifica se o nome foi preenchido.
+        if (!nome || nome.trim() === "") {
+
+            return;
+
+        }
+
+
+        // Cria a área utilizando o manipulador.
+        this.areaSelecionada = this.manipuladorAreas.adicionarNovaArea(
+
+            cenario,
+
+            nome.trim(),
+
+            window.cenaAtual
+
+        );
+
+
+        // Atualiza a interface.
+        this.atualizarListaAreas();
+
+        this.desenharPontos();
+
+
+        this.painel.mostrarMensagem(
+
+            "Nova área criada! Ajuste os pontos amarelos."
+
+        );
+
+    }
+
+
+    // ======================================
+    // COPIAR CÓDIGO DA ÁREA
+    // ======================================
+
+    async copiarCodigoArea() {
+
+        const area = this.obterAreaAtual();
+
+
+        if (!area) {
+
+            alert("Crie ou selecione uma área primeiro.");
+
+            return;
+
+        }
+
+
+        // Converte o objeto em código JavaScript.
+        const codigo = JSON.stringify(area, null, 4) + ",";
+
+
+        try {
+
+            // Tenta copiar utilizando a API do navegador.
+            await navigator.clipboard.writeText(codigo);
+
+
+            this.painel.mostrarMensagem(
+
+                "Código copiado! Cole dentro de areas no movimentacao.js."
+
+            );
+
+        } catch (erro) {
+
+            // Alternativa caso a cópia seja bloqueada.
+            const campo = document.createElement("textarea");
+
+            campo.value = codigo;
+
+            document.body.appendChild(campo);
+
+            campo.select();
+
+
+            const copiado = document.execCommand("copy");
+
+            campo.remove();
+
+
+            if (copiado) {
+
+                this.painel.mostrarMensagem(
+
+                    "Tentativa de cópia realizada. Confira o código no movimentacao.js."
+
+                );
+
+            } else {
+
+                this.painel.mostrarMensagem(
+
+                    "Não foi possível copiar automaticamente."
+
+                );
+
+            }
+
+        }
+
+    }
+
+
+    // ======================================
+    // ABRIR E FECHAR EDITOR
+    // ======================================
+
+    alternarEditor() {
+
+        this.editorAtivo = !this.editorAtivo;
+
+
+        if (this.editorAtivo) {
+
+            // Abre o editor.
+            this.painel.mostrar();
+
+            this.areaSelecionada = 0;
+
+            this.atualizarListaAreas();
+
+            this.desenharPontos();
+
+        } else {
+
+            // Fecha o editor.
+            this.painel.esconder();
+
+            this.manipuladorPontos.finalizarMovimento();
+
+
+            // Remove os pontos e atualiza
+            // as áreas clicáveis do cenário.
+
+            window.mostrarCenario(window.cenaAtual);
+
+        }
+
+    }
+
+
+    // ======================================
+    // SELECIONAR ÁREA
+    // ======================================
+
+    selecionarArea(indice) {
+
+        this.areaSelecionada = indice;
+
+        this.desenharPontos();
+
+    }
+
+
+    // ======================================
+    // CONFIGURAR EVENTOS
+    // ======================================
+
+    configurarEventos() {
+
+
+        // ==================================
+        // BOTÃO NOVA ÁREA
+        // ==================================
+
+        this.painel.botaoNovaArea.addEventListener("click", () => {
+
+            this.adicionarNovaArea();
+
+        });
+
+
+        // ==================================
+        // BOTÃO COPIAR CÓDIGO
+        // ==================================
+
+        this.painel.botaoCopiar.addEventListener("click", () => {
+
+            this.copiarCodigoArea();
+
+        });
+
+
+        // ==================================
+        // SELETOR DE ÁREAS
+        // ==================================
+
+        this.painel.seletor.addEventListener("change", (evento) => {
+
+            this.selecionarArea(Number(evento.target.value));
+
+        });
+
+
+        // ==================================
+        // TECLA E
+        // ==================================
+
+        document.addEventListener("keydown", (evento) => {
+
+            // Ignora a tecla se o usuário estiver digitando.
+            if (
+
+                evento.target.tagName === "INPUT" ||
+
+                evento.target.tagName === "TEXTAREA" ||
+
+                evento.target.tagName === "SELECT"
+
+            ) {
+
+                return;
+
+            }
+
+
+            if (evento.key.toLowerCase() === "e") {
+
+                this.alternarEditor();
+
+            }
+
+        });
+
+
+        // ==================================
+        // QUANDO O CENÁRIO MUDA
+        // ==================================
+
+        window.addEventListener("cenarioAtualizado", () => {
+
+            if (!this.editorAtivo) return;
+
+
+            // Reinicia a seleção de área.
+            this.areaSelecionada = 0;
+
+
+            // Atualiza a lista e os pontos.
+            this.atualizarListaAreas();
+
+            this.desenharPontos();
+
+        });
+
+    }
 
 }
 
 
 // ==========================================
-// COPIA O CÓDIGO DA ÁREA
+// INICIALIZAÇÃO DO EDITOR
 // ==========================================
 
-async function copiarCodigoArea() {
+// Cria uma instância da classe EditorAreas.
+// A partir daqui, o editor estará preparado
+// para receber os comandos do jogador.
 
-    const area = obterAreaAtual();
-
-    if (!area) {
-
-        alert("Crie ou selecione uma área primeiro.");
-
-        return;
-    }
-
-    // Monta o objeto JavaScript pronto para copiar
-    const codigo = JSON.stringify(area, null, 4) + ",";
-
-    try {
-
-        await navigator.clipboard.writeText(codigo);
-
-        document.getElementById("mensagem-editor").textContent =
-            "Código copiado! Cole dentro de areas no movimentacao.js.";
-
-    } catch (erro) {
-
-        // Alternativa caso o navegador bloqueie a cópia
-        const campo = document.createElement("textarea");
-
-        campo.value = codigo;
-
-        document.body.appendChild(campo);
-
-        campo.select();
-
-        document.execCommand("copy");
-
-        campo.remove();
-
-        document.getElementById("mensagem-editor").textContent =
-            "Tentativa de cópia realizada. Confira o código no movimentacao.js.";
-
-    }
-
-}
-
-
-// ==========================================
-// ABRIR E FECHAR O EDITOR
-// ==========================================
-
-function alternarEditor() {
-
-    editorAtivo = !editorAtivo;
-
-    if (editorAtivo) {
-
-        painel.style.display = "block";
-
-        areaSelecionada = 0;
-
-        atualizarListaAreas();
-
-        desenharPontos();
-
-    } else {
-
-        painel.style.display = "none";
-
-        pontoArrastado = null;
-
-        // Remove os pontos e atualiza as áreas clicáveis
-        window.mostrarCenario(window.cenaAtual);
-
-    }
-
-}
-
-
-// ==========================================
-// EVENTOS DOS BOTÕES DO PAINEL
-// ==========================================
-
-document.getElementById("botao-nova-area").addEventListener("click", () => {
-
-    adicionarNovaArea();
-
-});
-
-
-document.getElementById("botao-copiar").addEventListener("click", () => {
-
-    copiarCodigoArea();
-
-});
-
-
-document.getElementById("seletor-areas").addEventListener("change", (evento) => {
-
-    areaSelecionada = Number(evento.target.value);
-
-    desenharPontos();
-
-});
-
-
-// ==========================================
-// TECLA E PARA ABRIR OU FECHAR O EDITOR
-// ==========================================
-
-document.addEventListener("keydown", (evento) => {
-
-    // Ignora a tecla se o usuário estiver digitando em um campo
-    if (
-        evento.target.tagName === "INPUT" ||
-        evento.target.tagName === "TEXTAREA" ||
-        evento.target.tagName === "SELECT"
-    ) {
-        return;
-    }
-
-    if (evento.key.toLowerCase() === "e") {
-
-        alternarEditor();
-
-    }
-
-});
-
-
-// ==========================================
-// QUANDO O CENÁRIO MUDA
-// ==========================================
-
-window.addEventListener("cenarioAtualizado", () => {
-
-    if (!editorAtivo) return;
-
-    areaSelecionada = 0;
-
-    atualizarListaAreas();
-
-    desenharPontos();
-
-});
+window.editorAreas = new EditorAreas();
